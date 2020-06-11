@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 
 requests.adapters.DEFAULT_RETRIES = 5
 
-def getList():
+def getHouseList():
     for i in range(1, 100):
         url = "https://bj.lianjia.com/ditiefang/li652s43139478/pg{}/".format(i)
         print(url)
@@ -51,6 +51,17 @@ def getList():
             # 房屋类型
             house["buildType"] = str(houseInfo[6]).strip()
             print(json.dumps(house))
+            singleHouse(house["id"])
+            break
         break
 
-getList()
+def singleHouse(houseId):
+    url = "https://bj.lianjia.com/ershoufang/{}.html".format(houseId)
+    print(url)
+    s = requests.session()
+    s.keep_alive = False
+    html = s.get(url).text
+    soup = BeautifulSoup(html, 'html.parser')
+    print(soup)
+
+getHouseList()
